@@ -1,0 +1,856 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1183</width>
+    <height>759</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout_2">
+    <item row="0" column="0">
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="tab">
+       <attribute name="title">
+        <string>Собаки</string>
+       </attribute>
+       <widget class="QTableView" name="tableDogs">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>1171</width>
+          <height>651</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnAdd">
+        <property name="geometry">
+         <rect>
+          <x>950</x>
+          <y>80</y>
+          <width>90</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Добавить</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnDelete">
+        <property name="geometry">
+         <rect>
+          <x>1050</x>
+          <y>80</y>
+          <width>90</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Удалить</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnRefresh">
+        <property name="geometry">
+         <rect>
+          <x>950</x>
+          <y>120</y>
+          <width>90</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Обновить</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnPairs">
+        <property name="geometry">
+         <rect>
+          <x>950</x>
+          <y>160</y>
+          <width>191</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Пары для вязки</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnElite">
+        <property name="geometry">
+         <rect>
+          <x>950</x>
+          <y>200</y>
+          <width>191</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Пары для элитной вязки</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnService">
+        <property name="geometry">
+         <rect>
+          <x>950</x>
+          <y>250</y>
+          <width>191</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Подбор для службы</string>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="comboFilterDogsField">
+        <property name="geometry">
+         <rect>
+          <x>940</x>
+          <y>360</y>
+          <width>82</width>
+          <height>28</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="comboFilterDogsCondition">
+        <property name="geometry">
+         <rect>
+          <x>1040</x>
+          <y>360</y>
+          <width>82</width>
+          <height>28</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="lineFilterDogsValue">
+        <property name="geometry">
+         <rect>
+          <x>930</x>
+          <y>300</y>
+          <width>221</width>
+          <height>51</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnFilterDogs">
+        <property name="geometry">
+         <rect>
+          <x>1050</x>
+          <y>310</y>
+          <width>90</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Фильтр</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnClearFilterDogs">
+        <property name="geometry">
+         <rect>
+          <x>940</x>
+          <y>400</y>
+          <width>131</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Сбросить фильтр</string>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="tab_4">
+       <attribute name="title">
+        <string>Породы</string>
+       </attribute>
+       <widget class="QPushButton" name="btnAddBreed">
+        <property name="geometry">
+         <rect>
+          <x>1000</x>
+          <y>20</y>
+          <width>141</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Добавить породу</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnDeleteBreed">
+        <property name="geometry">
+         <rect>
+          <x>1000</x>
+          <y>60</y>
+          <width>141</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Удалить породу</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnRefreshBreed">
+        <property name="geometry">
+         <rect>
+          <x>1000</x>
+          <y>100</y>
+          <width>90</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Обновить</string>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="comboFilterBreedField">
+        <property name="geometry">
+         <rect>
+          <x>940</x>
+          <y>260</y>
+          <width>111</width>
+          <height>28</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="comboFilterBreedCondition">
+        <property name="geometry">
+         <rect>
+          <x>1060</x>
+          <y>260</y>
+          <width>82</width>
+          <height>28</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnFilterBreed">
+        <property name="geometry">
+         <rect>
+          <x>1060</x>
+          <y>210</y>
+          <width>81</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Фильтр</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="lineFilterBreedValue">
+        <property name="geometry">
+         <rect>
+          <x>940</x>
+          <y>200</y>
+          <width>211</width>
+          <height>51</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnClearFilterBreed">
+        <property name="geometry">
+         <rect>
+          <x>940</x>
+          <y>310</y>
+          <width>141</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Сбросить фильтр</string>
+        </property>
+       </widget>
+       <widget class="QTableView" name="tableBreeds">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>901</width>
+          <height>651</height>
+         </rect>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="ta">
+       <attribute name="title">
+        <string>Выставки</string>
+       </attribute>
+       <widget class="QTableView" name="tableExhibitions">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>1151</width>
+          <height>651</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnDeleteExh">
+        <property name="geometry">
+         <rect>
+          <x>1010</x>
+          <y>80</y>
+          <width>80</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Удалить</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnRefreshExh">
+        <property name="geometry">
+         <rect>
+          <x>1010</x>
+          <y>120</y>
+          <width>85</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Обновить</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnAddExh">
+        <property name="geometry">
+         <rect>
+          <x>1010</x>
+          <y>40</y>
+          <width>83</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Добавить</string>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="comboFilterExhCondition">
+        <property name="geometry">
+         <rect>
+          <x>1030</x>
+          <y>230</y>
+          <width>82</width>
+          <height>28</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="comboFilterExhField">
+        <property name="geometry">
+         <rect>
+          <x>890</x>
+          <y>230</y>
+          <width>111</width>
+          <height>28</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="lineFilterExhValue">
+        <property name="geometry">
+         <rect>
+          <x>890</x>
+          <y>170</y>
+          <width>231</width>
+          <height>51</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnFilterExh">
+        <property name="geometry">
+         <rect>
+          <x>1020</x>
+          <y>180</y>
+          <width>90</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Фильтр</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnClearFilterExh">
+        <property name="geometry">
+         <rect>
+          <x>890</x>
+          <y>270</y>
+          <width>151</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Сбросить фильтр</string>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="tab_3">
+       <attribute name="title">
+        <string>Родители</string>
+       </attribute>
+       <widget class="QTableView" name="tableParents">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>-10</y>
+          <width>1161</width>
+          <height>661</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnAddParent">
+        <property name="geometry">
+         <rect>
+          <x>949</x>
+          <y>30</y>
+          <width>161</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Добавить родителя</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnDeleteParent">
+        <property name="geometry">
+         <rect>
+          <x>949</x>
+          <y>80</y>
+          <width>161</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Удалить родителя</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnRefreshParent">
+        <property name="geometry">
+         <rect>
+          <x>990</x>
+          <y>130</y>
+          <width>90</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Обновить</string>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="comboFilterParentField">
+        <property name="geometry">
+         <rect>
+          <x>910</x>
+          <y>230</y>
+          <width>111</width>
+          <height>28</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="comboFilterParentCondition">
+        <property name="geometry">
+         <rect>
+          <x>1030</x>
+          <y>230</y>
+          <width>82</width>
+          <height>28</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="lineFilterParentValue">
+        <property name="geometry">
+         <rect>
+          <x>910</x>
+          <y>170</y>
+          <width>221</width>
+          <height>51</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnFilterParent">
+        <property name="geometry">
+         <rect>
+          <x>1030</x>
+          <y>180</y>
+          <width>90</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Фильтр</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnClearFilterParent">
+        <property name="geometry">
+         <rect>
+          <x>910</x>
+          <y>280</y>
+          <width>131</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Сбросить фильтр</string>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="tab_6">
+       <attribute name="title">
+        <string>Вязки</string>
+       </attribute>
+       <widget class="QTableView" name="tableMating">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>1161</width>
+          <height>681</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnAddMating">
+        <property name="geometry">
+         <rect>
+          <x>970</x>
+          <y>50</y>
+          <width>90</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Добавить</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnDeleteMating">
+        <property name="geometry">
+         <rect>
+          <x>970</x>
+          <y>100</y>
+          <width>90</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Удалить</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnRefreshMating">
+        <property name="geometry">
+         <rect>
+          <x>970</x>
+          <y>160</y>
+          <width>90</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Обновить</string>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="comboFilterMatingField">
+        <property name="geometry">
+         <rect>
+          <x>1000</x>
+          <y>260</y>
+          <width>82</width>
+          <height>28</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="comboFilterMatingCondition">
+        <property name="geometry">
+         <rect>
+          <x>900</x>
+          <y>260</y>
+          <width>82</width>
+          <height>28</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="lineFilterMatingValue">
+        <property name="geometry">
+         <rect>
+          <x>900</x>
+          <y>200</y>
+          <width>241</width>
+          <height>51</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnFilterMating">
+        <property name="geometry">
+         <rect>
+          <x>1040</x>
+          <y>210</y>
+          <width>90</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Фильтр</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnClearFilterMating">
+        <property name="geometry">
+         <rect>
+          <x>900</x>
+          <y>310</y>
+          <width>131</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Сбросить фильтр</string>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="tab_2">
+       <attribute name="title">
+        <string>Болезни</string>
+       </attribute>
+       <widget class="QTableView" name="tableDiseases">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>1171</width>
+          <height>651</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnAddDisease">
+        <property name="geometry">
+         <rect>
+          <x>960</x>
+          <y>10</y>
+          <width>90</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Добавить</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnDeleteDisease">
+        <property name="geometry">
+         <rect>
+          <x>960</x>
+          <y>60</y>
+          <width>90</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Удалить</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnRefreshDisease">
+        <property name="geometry">
+         <rect>
+          <x>960</x>
+          <y>110</y>
+          <width>90</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Обновить</string>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="comboFilterDiseaseField">
+        <property name="geometry">
+         <rect>
+          <x>900</x>
+          <y>220</y>
+          <width>82</width>
+          <height>28</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="comboFilterDiseaseCondition">
+        <property name="geometry">
+         <rect>
+          <x>990</x>
+          <y>220</y>
+          <width>82</width>
+          <height>28</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="lineFilterDiseaseValue">
+        <property name="geometry">
+         <rect>
+          <x>900</x>
+          <y>160</y>
+          <width>231</width>
+          <height>51</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnFilterDisease">
+        <property name="geometry">
+         <rect>
+          <x>1030</x>
+          <y>170</y>
+          <width>90</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Фильтр</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnClearFilterDisease">
+        <property name="geometry">
+         <rect>
+          <x>900</x>
+          <y>270</y>
+          <width>131</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Сбросить фильтр</string>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="tab_5">
+       <attribute name="title">
+        <string>История болезней</string>
+       </attribute>
+       <widget class="QTableView" name="tableHistory">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>1171</width>
+          <height>641</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnAddHistory">
+        <property name="geometry">
+         <rect>
+          <x>990</x>
+          <y>50</y>
+          <width>90</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Добавить</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnDeleteHistory">
+        <property name="geometry">
+         <rect>
+          <x>990</x>
+          <y>100</y>
+          <width>90</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Удалить</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnRefreshHistory">
+        <property name="geometry">
+         <rect>
+          <x>990</x>
+          <y>150</y>
+          <width>90</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Обновить</string>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="comboFilterHistoryField">
+        <property name="geometry">
+         <rect>
+          <x>900</x>
+          <y>260</y>
+          <width>82</width>
+          <height>28</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="comboFilterHistoryCondition">
+        <property name="geometry">
+         <rect>
+          <x>990</x>
+          <y>260</y>
+          <width>82</width>
+          <height>28</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="lineFilterHistoryValue">
+        <property name="geometry">
+         <rect>
+          <x>900</x>
+          <y>190</y>
+          <width>231</width>
+          <height>51</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnFilterHistory">
+        <property name="geometry">
+         <rect>
+          <x>1030</x>
+          <y>200</y>
+          <width>90</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Фильтр</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnClearFilterHistory">
+        <property name="geometry">
+         <rect>
+          <x>900</x>
+          <y>310</y>
+          <width>141</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Сбросить фильтр</string>
+        </property>
+       </widget>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1183</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuDogsClub">
+    <property name="title">
+     <string>DogsClub</string>
+    </property>
+   </widget>
+   <addaction name="menuDogsClub"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
