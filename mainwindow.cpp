@@ -894,219 +894,357 @@ MainWindow::MainWindow(QWidget *parent)
                     "SELECT d1.\"кличка\", d2.\"кличка\", "
                     "AVG(e1.\"оценка\"), AVG(e2.\"оценка\"), "
                     "COUNT(e1.\"код выставки\"), COUNT(e2.\"код выставки\") "
+
                     "FROM \"собаки\" d1 "
+
                     "JOIN \"собаки\" d2 "
                     "ON d1.\"код собаки\" < d2.\"код собаки\" "
+
                     "JOIN \"выставки\" e1 "
                     "ON e1.\"код собаки\" = d1.\"код собаки\" "
+
                     "JOIN \"выставки\" e2 "
                     "ON e2.\"код собаки\" = d2.\"код собаки\" "
+
+                    "LEFT JOIN \"родители\" p1 "
+                    "ON p1.\"код собаки\" = d1.\"код собаки\" "
+
+                    "LEFT JOIN \"родители\" p2 "
+                    "ON p2.\"код собаки\" = d2.\"код собаки\" "
+
                     "WHERE d1.\"пол\"='M' "
                     "AND d2.\"пол\"='F' "
+
+                    "AND NOT ("
+                    "p1.\"код отца\" = p2.\"код отца\" "
+                    "OR p1.\"код матери\" = p2.\"код матери\""
+                    ") "
+
                     "AND NOT \"проверка_родства_для_вязки\"("
                     "d1.\"код собаки\", "
                     "d2.\"код собаки\") "
+
                     "GROUP BY d1.\"кличка\", d2.\"кличка\" "
+
                     "HAVING AVG(e1.\"оценка\") >= :rating "
                     "AND AVG(e2.\"оценка\") >= :rating "
+
                     "ORDER BY " + orderBy
                     );
 
-                query.bindValue(":rating", minRating);
+            });
+
+        /// ЭЛИТНЫЕ ПАРЫ
+
+    connect(ui->btnElite, &QPushButton::clicked, this, [this]()
+
+            {
+                bool ok;
+
+                int minScore = QInputDialog::getInt(
+                    this,
+                    "Фильтр отчёта",
+                    "Минимальная оценка щенков:",
+                    5, 1, 5, 1, &ok);
+
+                if(!ok)
+                    return;
+
+                QString sortField = QInputDialog::getItem(
+                    this,
+                    "Сортировка",
+                    "Сортировать по:",
+                    {
+                        "средняя оценка щенков",
+                        "количество щенков",
+                        "количество медалей",
+                        "кличка самца",
+                        "кличка самки"
+                    },
+                    0,
+                    false,
+                    &ok);
+
+                if(!ok)
+                    return;
+
+                QString sortOrder = QInputDialog::getItem(
+                    this,
+                    "Порядок",
+                    "Порядок сортировки:",
+                    {
+                        "по убыванию",
+                        "по возрастанию"
+                    },
+                    0,
+                    false,
+                    &ok);
+
+                if(!ok)
+                    return;
+
+                QString orderDir =
+                    (sortOrder == "по убыванию")
+                        ? "DESC"
+                        : "ASC";
+
+                QString orderBy;
+
+                if(sortField == "средняя оценка щенков")
+                {
+                    orderBy =
+                        QString("AVG(ep.\"оценка\") %1")
+                            .arg(orderDir);
+                }
+                else if(sortField == "количество щенков")
+                {
+                    orderBy =
+                        QString("COUNT(DISTINCT puppy.\"код собаки\") %1")
+                            .arg(orderDir);
+                }
+                else if(sortField == "количество медалей")
+                {
+                    orderBy =
+                        QString("COUNT(DISTINCT e1.\"код выставки\") + COUNT(DISTINCT e2.\"код выставки\") %1")
+                            .arg(orderDir);
+                }
+                else if(sortField == "кличка самца")
+                {
+                    orderBy =
+                        QString("d1.\"кличка\" %1")
+                            .arg(orderDir);
+                }
+                else
+                {
+                    orderBy =
+                        QString("d2.\"кличка\" %1")
+                            .arg(orderDir);
+                }
+
+                QSqlQuery query;
+
+                query.prepare(
+                    "SELECT d1.\"кличка\", d2.\"кличка\", "
+                    "COUNT(DISTINCT puppy.\"код собаки\"), "
+                    "AVG(ep.\"оценка\"), "
+                    "COUNT(DISTINCT e1.\"код выставки\") + "
+                    "COUNT(DISTINCT e2.\"код выставки\") "
+
+                    "FROM \"вязки\" m "
+
+                    "JOIN \"собаки\" d1 "
+                    "ON d1.\"код собаки\" = m.\"самец\" "
+
+                    "JOIN \"собаки\" d2 "
+                    "ON d2.\"код собаки\" = m.\"самка\" "
+
+                    "JOIN \"собаки\" puppy "
+                    "ON puppy.\"код вязки\" = m.\"код вязки\" "
+
+                    "JOIN \"выставки\" ep "
+                    "ON ep.\"код собаки\" = puppy.\"код собаки\" "
+
+                    "LEFT JOIN \"выставки\" e1 "
+                    "ON e1.\"код собаки\" = d1.\"код собаки\" "
+
+                    "LEFT JOIN \"выставки\" e2 "
+                    "ON e2.\"код собаки\" = d2.\"код собаки\" "
+
+                    "WHERE NOT \"проверка_родства_для_вязки\"("
+                    "d1.\"код собаки\", "
+                    "d2.\"код собаки\") "
+
+                    "GROUP BY d1.\"кличка\", d2.\"кличка\" "
+
+                    "HAVING AVG(ep.\"оценка\") >= :score "
+                    "AND AVG(e1.\"оценка\") >= 4 "
+                    "AND AVG(e2.\"оценка\") >= 4 "
+
+                    "ORDER BY " + orderBy
+                    );
+
+                query.bindValue(":score", minScore);
 
                 query.exec();
 
                 QString result =
-                    "САМЕЦ | САМКА | СР.ОЦЕНКА | ВЫСТАВОК\n\n";
+                    "САМЕЦ | САМКА | ЩЕНКОВ | СР.ОЦЕНКА | МЕДАЛЕЙ\n\n";
 
                 while(query.next())
                 {
-                    double totalAvg =
-                        (
-                            query.value(2).toDouble()
-                            +
-                            query.value(3).toDouble()
-                            ) / 2.0;
-
-                    int totalShows =
-                        query.value(4).toInt()
-                        +
-                        query.value(5).toInt();
-
                     result +=
                         query.value(0).toString()
                         + " | "
                         + query.value(1).toString()
                         + " | "
-                        + QString::number(totalAvg, 'f', 2)
+                        + query.value(2).toString()
                         + " | "
-                        + QString::number(totalShows)
+                        + QString::number(query.value(3).toDouble(), 'f', 2)
+                        + " | "
+                        + query.value(4).toString()
                         + "\n";
                 }
 
                 QMessageBox::information(
                     this,
-                    "Отчёт: пары для вязки",
+                    "Элитная вязка",
                     result
                     );
 
             });
 
-        // ЭЛИТНЫЕ ПАРЫ
 
-        connect(ui->btnElite, &QPushButton::clicked, this, [this]()
+    // СЛУЖЕБНЫЕ СОБАКИ
 
+    connect(ui->btnService, &QPushButton::clicked, this, [this]()
 
-                {
-                    bool ok;
+            {
+                bool ok;
 
+                int minScore = QInputDialog::getInt(
+                    this,
+                    "Фильтр отчёта",
+                    "Минимальная средняя оценка:",
+                    3, 1, 5, 1, &ok);
 
-                        int minScore = QInputDialog::getInt(
-                            this, "Фильтр отчёта", "Минимальная оценка щенков:",
-                            5, 1, 5, 1, &ok);
-                    if(!ok) return;
+                if(!ok)
+                    return;
 
-                    QString sortField = QInputDialog::getItem(
-                        this, "Сортировка", "Сортировать по:",
-                        {"средняя оценка щенков", "количество щенков", "количество медалей",
-                         "кличка самца", "кличка самки"},
-                        0, false, &ok);
-                    if(!ok) return;
-
-                    QString sortOrder = QInputDialog::getItem(
-                        this, "Порядок", "Порядок сортировки:",
-                        {"по убыванию", "по возрастанию"},
-                        0, false, &ok);
-                    if(!ok) return;
-
-                    QString orderDir = (sortOrder == "по убыванию") ? "DESC" : "ASC";
-
-                    QString orderBy;
-
-                    if(sortField == "средняя оценка щенков")
-                        orderBy = QString("AVG(ep.\"оценка\") %1").arg(orderDir);
-                    else if(sortField == "количество щенков")
-                        orderBy = QString("COUNT(DISTINCT puppy.\"код собаки\") %1").arg(orderDir);
-                    else if(sortField == "количество медалей")
-                        orderBy = QString("COUNT(DISTINCT e1.\"код выставки\") + COUNT(DISTINCT e2.\"код выставки\") %1").arg(orderDir);
-                    else if(sortField == "кличка самца")
-                        orderBy = QString("d1.\"кличка\" %1").arg(orderDir);
-                    else
-                        orderBy = QString("d2.\"кличка\" %1").arg(orderDir);
-
-                    QSqlQuery query;
-
-                    query.prepare(
-                        "SELECT d1.\"кличка\", d2.\"кличка\", "
-                        "COUNT(DISTINCT puppy.\"код собаки\"), AVG(ep.\"оценка\"), "
-                        "COUNT(DISTINCT e1.\"код выставки\") + COUNT(DISTINCT e2.\"код выставки\") "
-                        "FROM \"вязки\" m "
-                        "JOIN \"собаки\" d1 ON d1.\"код собаки\" = m.\"самец\" "
-                        "JOIN \"собаки\" d2 ON d2.\"код собаки\" = m.\"самка\" "
-                        "JOIN \"собаки\" puppy ON puppy.\"код вязки\" = m.\"код вязки\" "
-                        "JOIN \"выставки\" ep ON ep.\"код собаки\" = puppy.\"код собаки\" "
-                        "LEFT JOIN \"выставки\" e1 ON e1.\"код собаки\" = d1.\"код собаки\" AND e1.\"медаль\" = true "
-                        "LEFT JOIN \"выставки\" e2 ON e2.\"код собаки\" = d2.\"код собаки\" AND e2.\"медаль\" = true "
-                        "GROUP BY d1.\"кличка\", d2.\"кличка\" "
-                        "HAVING AVG(ep.\"оценка\") >= :score "
-                        "ORDER BY " + orderBy
-                        );
-
-                    query.bindValue(":score", minScore);
-                    query.exec();
-
-                    QString result = "САМЕЦ | САМКА | ЩЕНКОВ | СР.ОЦЕНКА | МЕДАЛЕЙ\n\n";
-
-                    while(query.next())
+                QString sortField = QInputDialog::getItem(
+                    this,
+                    "Сортировка",
+                    "Сортировать по:",
                     {
-                        result += query.value(0).toString() + " | "
-                                  + query.value(1).toString() + " | "
-                                  + query.value(2).toString() + " | "
-                                  + QString::number(query.value(3).toDouble(), 'f', 2) + " | "
-                                  + query.value(4).toString() + "\n";
-                    }
+                        "средняя оценка",
+                        "количество болезней",
+                        "количество выставок",
+                        "кличка"
+                    },
+                    0,
+                    false,
+                    &ok);
 
-                    QMessageBox::information(this, "Элитная вязка", result);
+                if(!ok)
+                    return;
 
-
-                });
-
-        // СЛУЖЕБНЫЕ СОБАКИ
-
-        connect(ui->btnService, &QPushButton::clicked, this, [this]()
-
-
-                {
-                    bool ok;
-
-
-                        int minScore = QInputDialog::getInt(
-                            this, "Фильтр отчёта", "Минимальная средняя оценка:",
-                            3, 1, 5, 1, &ok);
-                    if(!ok) return;
-
-                    QString sortField = QInputDialog::getItem(
-                        this, "Сортировка", "Сортировать по:",
-                        {"средняя оценка", "количество болезней", "количество выставок", "кличка"},
-                        0, false, &ok);
-                    if(!ok) return;
-
-                    QString sortOrder = QInputDialog::getItem(
-                        this, "Порядок", "Порядок сортировки:",
-                        {"по убыванию", "по возрастанию"},
-                        0, false, &ok);
-                    if(!ok) return;
-
-                    QString orderDir = (sortOrder == "по убыванию") ? "DESC" : "ASC";
-
-                    QString orderBy;
-
-                    if(sortField == "средняя оценка")
-                        orderBy = QString("AVG(e.\"оценка\") %1").arg(orderDir);
-                    else if(sortField == "количество болезней")
-                        orderBy = QString("COUNT(DISTINCT h.\"код записи\") %1").arg(orderDir);
-                    else if(sortField == "количество выставок")
-                        orderBy = QString("COUNT(DISTINCT e.\"код выставки\") %1").arg(orderDir);
-                    else
-                        orderBy = QString("s.\"кличка\" %1").arg(orderDir);
-
-                    QSqlQuery query;
-
-                    query.prepare(
-                        "SELECT s.\"кличка\", AVG(e.\"оценка\"), "
-                        "COUNT(DISTINCT h.\"код записи\"), COUNT(DISTINCT e.\"код выставки\") "
-                        "FROM \"собаки\" s "
-                        "LEFT JOIN \"выставки\" e ON e.\"код собаки\" = s.\"код собаки\" "
-                        "LEFT JOIN \"история болезней\" h ON h.\"код собаки\" = s.\"код собаки\" "
-                        "WHERE s.\"оценка психики\" = 5 "
-                        "AND NOT EXISTS ("
-                        "SELECT 1 FROM \"история болезней\" hh "
-                        "JOIN \"болезни\" b ON b.\"код болезни\" = hh.\"код болезни\" "
-                        "WHERE hh.\"код собаки\" = s.\"код собаки\" "
-                        "AND b.\"наименование\" = 'Чума'"
-                        ") "
-                        "GROUP BY s.\"кличка\" "
-                        "HAVING AVG(e.\"оценка\") >= :score "
-                        "ORDER BY " + orderBy
-                        );
-
-                    query.bindValue(":score", minScore);
-                    query.exec();
-
-                    QString result = "КЛИЧКА | СР.ОЦЕНКА | БОЛЕЗНЕЙ | ВЫСТАВОК\n\n";
-
-                    while(query.next())
+                QString sortOrder = QInputDialog::getItem(
+                    this,
+                    "Порядок",
+                    "Порядок сортировки:",
                     {
-                        result += query.value(0).toString() + " | "
-                                  + QString::number(query.value(1).toDouble(), 'f', 2) + " | "
-                                  + query.value(2).toString() + " | "
-                                  + query.value(3).toString() + "\n";
-                    }
+                        "по убыванию",
+                        "по возрастанию"
+                    },
+                    0,
+                    false,
+                    &ok);
 
-                    QMessageBox::information(this, "Служебные собаки", result);
+                if(!ok)
+                    return;
+
+                QString orderDir =
+                    (sortOrder == "по убыванию")
+                        ? "DESC"
+                        : "ASC";
+
+                QString orderBy;
+
+                if(sortField == "средняя оценка")
+                {
+                    orderBy =
+                        QString("AVG(e.\"оценка\") %1")
+                            .arg(orderDir);
+                }
+                else if(sortField == "количество болезней")
+                {
+                    orderBy =
+                        QString("COUNT(DISTINCT h.\"код записи\") %1")
+                            .arg(orderDir);
+                }
+                else if(sortField == "количество выставок")
+                {
+                    orderBy =
+                        QString("COUNT(DISTINCT e.\"код выставки\") %1")
+                            .arg(orderDir);
+                }
+                else
+                {
+                    orderBy =
+                        QString("s.\"кличка\" %1")
+                            .arg(orderDir);
+                }
+
+                QSqlQuery query;
+
+                query.prepare(
+                    "SELECT s.\"кличка\", "
+                    "AVG(e.\"оценка\"), "
+                    "COUNT(DISTINCT h.\"код записи\"), "
+                    "COUNT(DISTINCT e.\"код выставки\") "
+
+                    "FROM \"собаки\" s "
+
+                    "LEFT JOIN \"выставки\" e "
+                    "ON e.\"код собаки\" = s.\"код собаки\" "
+
+                    "LEFT JOIN \"история болезней\" h "
+                    "ON h.\"код собаки\" = s.\"код собаки\" "
+
+                    "WHERE s.\"оценка психики\" = 5 "
+
+                    "AND NOT EXISTS ("
+                    "SELECT 1 "
+                    "FROM \"история болезней\" hh "
+                    "JOIN \"болезни\" b "
+                    "ON b.\"код болезни\" = hh.\"код болезни\" "
+                    "WHERE hh.\"код собаки\" = s.\"код собаки\" "
+                    "AND b.\"наименование\" = 'Чума'"
+                    ") "
+
+                    "AND ("
+                    "SELECT COUNT(*) "
+                    "FROM \"история болезней\" h2 "
+                    "WHERE h2.\"код собаки\" = s.\"код собаки\" "
+                    "AND h2.\"дата начала\" >= CURRENT_DATE - INTERVAL '2 years'"
+                    ") <= 1 "
+
+                    "GROUP BY s.\"кличка\" "
+
+                    "HAVING AVG(e.\"оценка\") >= :score "
+
+                    "ORDER BY " + orderBy
+                    );
+
+                query.bindValue(":score", minScore);
+
+                query.exec();
+
+                QString result =
+                    "КЛИЧКА | СР.ОЦЕНКА | БОЛЕЗНЕЙ | ВЫСТАВОК\n\n";
+
+                while(query.next())
+                {
+                    result +=
+                        query.value(0).toString()
+                        + " | "
+                        + QString::number(query.value(1).toDouble(), 'f', 2)
+                        + " | "
+                        + query.value(2).toString()
+                        + " | "
+                        + query.value(3).toString()
+                        + "\n";
+                }
+
+                QMessageBox::information(
+                    this,
+                    "Служебные собаки",
+                    result
+                    );
+
+            });
 
 
-                });
+
 }
 
 // ПОДКЛЮЧЕНИЕ К БД
